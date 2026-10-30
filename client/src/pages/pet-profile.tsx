@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Camera, Flag, ImagePlus, MoreHorizontal, Pencil, Rainbow, Trash2, UserCheck, UserPlus } from "lucide-react";
+import { Camera, Flag, Home, ImagePlus, MoreHorizontal, Pencil, Rainbow, Trash2, UserCheck, UserPlus } from "lucide-react";
 import type { PetProfile } from "@shared/schema";
 import { speciesInfo } from "@shared/species";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,8 @@ import { LightButton } from "@/components/bridge/light-button";
 import { Tributes } from "@/components/bridge/tributes";
 import { RainbowDialog } from "@/components/bridge/rainbow-dialog";
 import { ReportDialog } from "@/components/report-dialog";
+import { PhotoGrid, usePetPhotos } from "@/components/pets/photo-grid";
+import { MemorySlideshow } from "@/components/bridge/memory-slideshow";
 import { usePageTitle } from "@/components/page-title";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
@@ -39,11 +41,13 @@ export default function PetProfilePage() {
   const [rainbowOpen, setRainbowOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
+  const [returnOpen, setReturnOpen] = useState(false);
   const avatarInput = useRef<HTMLInputElement>(null);
   const coverInput = useRef<HTMLInputElement>(null);
 
   const key = [`/api/pets/${id}`];
   const { data: pet, isLoading, isError } = useQuery<PetProfile>({ queryKey: key, staleTime: 0 });
+  const { data: photos } = usePetPhotos(id);
   usePageTitle(pet ? (pet.status === "rainbow" ? `${pet.name} sul Ponte dell'Arcobaleno` : pet.name) : undefined);
 
   const follow = useMutation({
@@ -60,6 +64,12 @@ export default function PetProfilePage() {
     },
     onSuccess: () => { qc.invalidateQueries(); toast({ title: "Che bella foto! 📸" }); },
     onError: (e: Error) => toast({ title: "Foto non caricata", description: e.message, variant: "destructive" }),
+  });
+
+  const bringBack = useMutation({
+    mutationFn: async () => { await apiRequest("POST", `/api/pets/${id}/return`); },
+    onSuccess: () => { qc.invalidateQueries(); toast({ title: "Bentornato tra noi! 🐾", description: "Il profilo è di nuovo tra gli amici di oggi." }); },
+    onError: (e: Error) => toast({ title: "Non è andata", description: e.message, variant: "destructive" }),
   });
 
   const remove = useMutation({
@@ -143,13 +153,15 @@ export default function PetProfilePage() {
                         <DropdownMenuItem onClick={() => navigate(`/pet/${pet.id}/modifica`)}><Pencil className="mr-2 h-4 w-4" /> Modifica il profilo</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => avatarInput.current?.click()}><Camera className="mr-2 h-4 w-4" /> Cambia foto profilo</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => coverInput.current?.click()}><ImagePlus className="mr-2 h-4 w-4" /> Cambia copertina</DropdownMenuItem>
-                        {!rainbow && (
-                          <>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => setRainbowOpen(true)} data-testid="open-rainbow">
-                              <Rainbow className="mr-2 h-4 w-4" /> Accompagna sul Ponte
-                            </DropdownMenuItem>
-                          </>
+                        <DropdownMenuSeparator />
+                        {rainbow ? (
+                          <DropdownMenuItem onClick={() => setReturnOpen(true)} data-testid="open-return">
+                            <Home className="mr-2 h-4 w-4" /> È stato un errore? Riporta tra noi
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem onClick={() => setRainbowOpen(true)} data-testid="open-rainbow">
+                            <Rainbow className="mr-2 h-4 w-4" /> Accompagna sul Ponte
+                          </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-destructive" onClick={() => setDeleteOpen(true)}><Trash2 className="mr-2 h-4 w-4" /> Elimina il profilo</DropdownMenuItem>
@@ -189,6 +201,7 @@ export default function PetProfilePage() {
 
       {rainbow && (
         <div className="rainbow-sky mt-4 space-y-3 rounded-3xl p-6 text-center text-slate-800" data-testid="rainbow-banner">
+          {photos && photos.length > 0 && <MemorySlideshow photos={photos} petName={pet.name} />}
           <p className="font-heading text-2xl"><span className="rainbow-text">Resta con noi, nel cuore</span> 🌈</p>
           <p className="text-sm">
             {pet.rainbowAt ? `${pet.name} ha attraversato il Ponte dell'Arcobaleno il ${longDate(pet.rainbowAt)}.` : `${pet.name} ha attraversato il Ponte dell'Arcobaleno.`}
@@ -208,18 +221,44 @@ export default function PetProfilePage() {
         {pet.isOwner && <Composer pets={mine} defaultPetId={pet.id} />}
         {rainbow ? (
           <Tabs defaultValue="ricordi">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="ricordi">Ricordi</TabsTrigger>
+              <TabsTrigger value="foto">Foto</TabsTrigger>
               <TabsTrigger value="dediche">Dediche</TabsTrigger>
             </TabsList>
             <TabsContent value="ricordi" className="mt-4">{posts}</TabsContent>
+            <TabsContent value="foto" className="mt-4"><PhotoGrid petId={pet.id} petName={pet.name} /></TabsContent>
             <TabsContent value="dediche" className="mt-4"><Tributes petId={pet.id} petName={pet.name} /></TabsContent>
           </Tabs>
-        ) : posts}
+        ) : (
+          <Tabs defaultValue="post">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="post">Post</TabsTrigger>
+              <TabsTrigger value="foto">Foto</TabsTrigger>
+            </TabsList>
+            <TabsContent value="post" className="mt-4">{posts}</TabsContent>
+            <TabsContent value="foto" className="mt-4"><PhotoGrid petId={pet.id} petName={pet.name} /></TabsContent>
+          </Tabs>
+        )}
       </div>
 
       {pet.isOwner && !rainbow && <RainbowDialog petId={pet.id} petName={pet.name} open={rainbowOpen} onOpenChange={setRainbowOpen} />}
       {reportOpen && <ReportDialog target={{ petId: pet.id }} open onOpenChange={setReportOpen} />}
+      <AlertDialog open={returnOpen} onOpenChange={setReturnOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Riportare {pet.name} tra noi?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se il passaggio sul Ponte è stato fatto per errore, {pet.name} torna tra gli amici di oggi, con tutte le foto e i post.
+              Le luci e le dediche ricevute non vengono cancellate: restano messe da parte.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annulla</AlertDialogCancel>
+            <AlertDialogAction onClick={() => bringBack.mutate()} data-testid="confirm-return">Riporta tra noi</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -258,6 +258,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ id });
   });
 
+  // "Riporta tra noi": annulla un passaggio sul Ponte fatto per errore.
+  // Luci e dediche non si cancellano: restano nel database, solo non si vedono
+  // finché il profilo è tra gli amici di oggi.
+  app.post("/api/pets/:id/return", requireAuth, async (req, res) => {
+    const id = paramId(req);
+    if (!id) return res.status(404).json({ message: "Non troviamo questo animale" });
+    const pet = await ownedPet(req, res, id);
+    if (!pet) return;
+    if (pet.status !== "rainbow") return res.status(400).json({ message: "Questo amico è già qui con noi" });
+    await db.update(pets).set({ status: "alive", rainbowAt: null, rainbowMessage: null }).where(eq(pets.id, id));
+    res.json({ id });
+  });
+
+  // Le foto dei suoi post, per la galleria e la presentazione sul Ponte
+  app.get("/api/pets/:id/photos", async (req, res) => {
+    const id = paramId(req);
+    if (!id) return res.status(404).json({ message: "Non troviamo questo animale" });
+    const rows = await db.select({ id: posts.id, url: posts.imageUrl, text: posts.text }).from(posts)
+      .where(and(eq(posts.petId, id), sql`${posts.imageUrl} is not null`))
+      .orderBy(desc(posts.id))
+      .limit(60);
+    res.json(rows);
+  });
+
   // Accendere una luce: una al giorno per persona
   app.post("/api/pets/:id/light", requireAuth, async (req, res) => {
     const id = paramId(req);

@@ -31,13 +31,22 @@ React 18 + Vite + Tailwind/shadcn + wouter + TanStack Query · Express + Passpor
 - Pagina nuova ⇒ aggiungerla anche in `staticSeo` di `server/vite.ts` se pubblica.
 - Modello dati: users → pets (status `alive`|`rainbow`) → posts → cuddles/comments; follows; lights (1/giorno/persona); tributes; reports.
 - Regole: solo il proprietario posta a nome dell'animale; commenti/dediche eliminabili da autore, proprietario o admin; tutti i testi passano dal filtro parolacce.
+- **Riporta tra noi** (`POST /api/pets/:id/return`, solo proprietario/admin): annulla un passaggio sul Ponte fatto per errore. Luci e dediche **non** si cancellano: restano nel DB, nascoste finché il profilo è "alive".
 
-## 4. Stato (30/10/2026)
-**Fatto e provato** (curl + browser Chrome, desktop e mobile): registrazione/login, profili animali (foto profilo e copertina), post con foto, coccole, commenti, seguire, feed "Per te"/"Chi segui", esplora con filtri, passaggio sul Ponte, luci, dediche, "Ricordi dal Ponte", segnalazioni (salvate in tabella), build di produzione.
+## 3b. Foto e video del sito (decisione di Sara del 30/10: il sito deve essere molto fotografico ed emozionale)
+- Elenco unico in `client/src/lib/brand-media.ts`: per ogni spazio c'è il percorso del file, il testo alternativo e le parole chiave `cerca` per trovarlo su Pexels/Mixkit (licenza gratuita anche commerciale).
+- File attesi (oggi **mancano tutti**: al loro posto compaiono sfumature colorate): `client/public/brand/video/{hero-corsa,insieme,ponte-tramonto,ponte-abbraccio}.mp4` (+ `.jpg` della prima immagine con lo stesso nome) e `client/public/brand/foto/{momento-1..6,funzione-profilo,funzione-coccole,funzione-ponte,accesso}.jpg`.
+- Dove compaiono: home (video a tutto schermo, mosaico "Momenti", schede con foto, video "Insieme", anteprima del Ponte con video), Ponte (video in apertura + sezione video con persone e animali), pagina di accesso.
+- Video: orizzontali, 10-20 s, senza scritte; prima di metterli comprimerli a 720p (~2-4 MB) con ffmpeg-static e ricavare il `.jpg` di anteprima. `BrandVideo` li fa partire solo quando sono visibili, muti e in loop; con "riduci movimento" mostra l'immagine ferma.
+- **La rete di questo ambiente blocca pexels.com, mixkit.co, pixabay.com e unsplash.com**: per scaricarli Sara deve aggiungere quei domini nelle impostazioni di rete dell'ambiente, oppure caricare i file in una cartella Google Drive.
+- Anche i contenuti degli utenti sono più fotografici: schede animale a foto piena, scheda "Foto" (galleria con ingrandimento) nel profilo, e sul Ponte una presentazione automatica "I momenti più belli di …" con le foto dei suoi post.
+
+## 4. Stato (30/10/2026, sera)
+**Fatto e provato** (curl + browser Chrome, desktop e mobile): registrazione/login, profili animali (foto profilo e copertina), post con foto, coccole, commenti, seguire, feed "Per te"/"Chi segui", esplora con filtri, passaggio sul Ponte, luci, dediche, "Ricordi dal Ponte", segnalazioni (salvate in tabella), "Riporta tra noi", galleria foto e presentazione sul Ponte, video di sfondo (provati con file sintetici), build di produzione.
 **Non ancora fatto**
 1. Nome definitivo/dominio, logo vero (ora cuore+zampa SVG provvisorio), repo collegato a Railway + variabili (`DATABASE_URL`, `SESSION_SECRET`, `DATA_DIR`, `BASE_URL`) + volume.
 2. **Pannello admin** per le segnalazioni (la tabella `reports` si riempie ma nessuno la legge) e moderatori; `is_admin` si imposta a mano nel DB.
 3. Termini, privacy e cookie (**da Sara/consulente: non inventarli**), maggiore età/consenso, verifica email, recupero password, anteprima privata (da Vivo con te: `private-mode.ts`).
 4. Notifiche (nuova coccola/commento, ricorrenze: compleanno e anniversario sul Ponte), PWA installabile (da Vivo con te), più foto per post, ricerca persone.
-5. Possibile "riporta tra noi" in caso di passaggio sul Ponte fatto per errore (oggi irreversibile; serve intervento sul DB).
+5. **Foto e video del sito da procurare** (vedi §3b).
 6. Test automatici: oggi solo prove manuali.
