@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Palette di Resta con me: calda e gioiosa.
+  corallo (primario) · sole · cielo · menta · lilla — sopra un fondo crema.
+*/
+:root {
+  --background: 40 100% 97%;
+  --foreground: 258 32% 20%;
+  --muted: 38 60% 93%;
+  --muted-foreground: 258 14% 42%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 258 32% 20%;
+  --card: 0 0% 100%;
+  --card-foreground: 258 32% 20%;
+  --border: 32 45% 88%;
+  --input: 32 40% 84%;
+  --primary: 12 88% 58%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 44 100% 70%;
+  --secondary-foreground: 258 32% 20%;
+  --accent: 36 100% 91%;
+  --accent-foreground: 258 32% 20%;
+  --destructive: 0 78% 52%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 12 88% 58%;
+  --radius: 1.1rem;
+
+  --sky: 202 88% 66%;
+  --mint: 158 52% 58%;
+  --lilac: 265 78% 78%;
+  --sun: 44 100% 62%;
+  --coral: 12 88% 58%;
+
+  --chart-1: 12 88% 58%;
+  --chart-2: 44 100% 62%;
+  --chart-3: 202 88% 66%;
+  --chart-4: 158 52% 58%;
+  --chart-5: 265 78% 78%;
+}
+
+.dark {
+  --background: 258 30% 10%;
+  --foreground: 40 60% 95%;
+  --muted: 258 22% 17%;
+  --muted-foreground: 258 15% 70%;
+  --popover: 258 28% 13%;
+  --popover-foreground: 40 60% 95%;
+  --card: 258 28% 13%;
+  --card-foreground: 40 60% 95%;
+  --border: 258 20% 22%;
+  --input: 258 20% 24%;
+  --primary: 12 88% 64%;
+  --primary-foreground: 258 30% 10%;
+  --secondary: 44 90% 60%;
+  --secondary-foreground: 258 30% 10%;
+  --accent: 258 22% 20%;
+  --accent-foreground: 40 60% 95%;
+  --destructive: 0 70% 45%;
+  --destructive-foreground: 0 0% 100%;
+  --ring: 12 88% 64%;
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Nunito', system-ui, sans-serif;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Fredoka', 'Nunito', system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    font-weight: 600;
+  }
+
+  ::selection { background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); }
+  html { scroll-behavior: smooth; }
+  a, button, input, textarea, select { -webkit-tap-highlight-color: transparent; }
+}
+
+@layer components {
+  .site-shell {
+    background:
+      radial-gradient(circle at 0% 0%, hsl(var(--sun) / .18), transparent 26rem),
+      radial-gradient(circle at 100% 12%, hsl(var(--sky) / .16), transparent 28rem),
+      hsl(var(--background));
+  }
+
+  .soft-card {
+    @apply rounded-3xl border bg-card;
+    box-shadow: 0 10px 30px -22px hsl(var(--foreground) / .35);
+  }
+
+  .rainbow-text {
+    background: linear-gradient(90deg, #ff7a7a, #ffb25c, #f4c542, #5ccf8b, #4fb3f5, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .rainbow-bar {
+    background: linear-gradient(90deg, #ff8a8a, #ffc27a, #ffe27a, #9be3a8, #8fd0ff, #b9a2ff);
+  }
+
+  /* Il cielo del Ponte: pastello, luminoso */
+  .rainbow-sky {
+    background:
+      radial-gradient(circle at 20% 20%, rgb(255 255 255 / .9), transparent 14rem),
+      radial-gradient(circle at 85% 30%, rgb(255 255 255 / .7), transparent 12rem),
+      linear-gradient(180deg, #d9ecff 0%, #efe6ff 55%, #fff1e0 100%);
+  }
+  .dark .rainbow-sky {
+    background: linear-gradient(180deg, #1e2a4a 0%, #3a2a5a 60%, #4a3040 100%);
+  }
+}
+
+/* Piccoli momenti di gioia, solo per chi non ha chiesto meno animazioni */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes pop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35) rotate(-6deg); }
+    100% { transform: scale(1); }
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 4px rgb(255 200 80 / .6)); }
+    50% { filter: drop-shadow(0 0 12px rgb(255 200 80 / .95)); }
+  }
+  .animate-pop { animation: pop .45s ease-out; }
+  .animate-floaty { animation: floaty 4s ease-in-out infinite; }
+  .animate-glow { animation: glow 2.4s ease-in-out infinite; }
+  .hover-lift { transition: transform .2s ease, box-shadow .2s ease; }
+  .hover-lift:hover { transform: translateY(-3px); box-shadow: 0 18px 36px -24px hsl(var(--foreground) / .4); }
+}

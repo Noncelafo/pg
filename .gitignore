@@ -1,0 +1,18 @@
+node_modules
+dist
+.DS_Store
+server/public
+*.tar.gz
+
+# Segreti e configurazione locale: mai su GitHub
+.env
+.env.*
+!.env.example
+
+# Contenuti caricati dagli utenti (foto): sono dati, non codice.
+# Su Railway vivono nel volume persistente (DATA_DIR).
+uploads/
+private/
+
+.local/
+*.log
