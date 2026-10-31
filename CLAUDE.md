@@ -35,7 +35,7 @@ React 18 + Vite + Tailwind/shadcn + wouter + TanStack Query · Express + Passpor
 
 ## 3b. Foto e video del sito (decisione di Sara del 30/10: il sito deve essere molto fotografico ed emozionale)
 - Elenco unico in `client/src/lib/brand-media.ts`: per ogni spazio c'è il percorso del file, il testo alternativo e le parole chiave `cerca` per trovarlo su Pexels/Mixkit (licenza gratuita anche commerciale).
-- File attesi (31/10: le **10 foto ci sono**, generate su ChatGPT e compresse a lato lungo 1600, JPG ~200 KB; **mancano ancora i 4 video**, al loro posto compaiono sfumature colorate. Sora non è più disponibile: servono altre strade, per esempio Pexels/Mixkit o un altro generatore video): `client/public/brand/video/{hero-corsa,insieme,ponte-tramonto,ponte-abbraccio}.mp4` (+ `.jpg` della prima immagine con lo stesso nome) e `client/public/brand/foto/{momento-1..6,funzione-profilo,funzione-coccole,funzione-ponte,accesso}.jpg`.
+- File (31/10: le **10 foto ci sono**, generate su ChatGPT e compresse a lato lungo 1600, JPG ~200 KB; i **4 video ci sono**, clip gratuite di Pexels (licenza Pexels) scelte a mano e compresse a 720p, max 15 s, senza audio, con anteprima .jpg: hero-corsa = Pexels 5469099, insieme = 5894717, ponte-tramonto = 4139459, ponte-abbraccio = 8498668; originali in `_raw/`, ignorata da git): `client/public/brand/video/{hero-corsa,insieme,ponte-tramonto,ponte-abbraccio}.mp4` (+ `.jpg` della prima immagine con lo stesso nome) e `client/public/brand/foto/{momento-1..6,funzione-profilo,funzione-coccole,funzione-ponte,accesso}.jpg`.
 - Dove compaiono: home (video a tutto schermo, mosaico "Momenti", schede con foto, video "Insieme", anteprima del Ponte con video), Ponte (video in apertura + sezione video con persone e animali), pagina di accesso.
 - Video: orizzontali, 10-20 s, senza scritte; prima di metterli comprimerli a 720p (~2-4 MB) con ffmpeg-static e ricavare il `.jpg` di anteprima. `BrandVideo` li fa partire solo quando sono visibili, muti e in loop; con "riduci movimento" mostra l'immagine ferma.
 - **La rete di questo ambiente blocca pexels.com, mixkit.co, pixabay.com e unsplash.com**: per scaricarli Sara deve aggiungere quei domini nelle impostazioni di rete dell'ambiente, oppure caricare i file in una cartella Google Drive.
@@ -48,5 +48,5 @@ React 18 + Vite + Tailwind/shadcn + wouter + TanStack Query · Express + Passpor
 2. **Pannello admin** per le segnalazioni (la tabella `reports` si riempie ma nessuno la legge) e moderatori; `is_admin` si imposta a mano nel DB.
 3. Termini, privacy e cookie (**da Sara/consulente: non inventarli**), maggiore età/consenso, verifica email, recupero password, anteprima privata (da Vivo con te: `private-mode.ts`).
 4. Notifiche (nuova coccola/commento, ricorrenze: compleanno e anniversario sul Ponte), PWA installabile (da Vivo con te), più foto per post, ricerca persone.
-5. **Foto e video del sito da procurare** (vedi §3b).
+5. Foto e video del sito: fatti (vedi §3b); eventualmente sostituire le clip Pexels con riprese originali.
 6. Test automatici: oggi solo prove manuali.
