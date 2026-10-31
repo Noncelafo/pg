@@ -16,3 +16,4 @@ private/
 
 .local/
 *.log
+_raw/
