@@ -45,15 +45,15 @@ export const VIDEO = {
 
 export const FOTO = {
   momenti: [
-    { src: "/brand/foto/momento-1.jpg", alt: "Bambina che ride abbracciando un cucciolo", cerca: "child hugging puppy laughing", didascalia: "Il primo abbraccio" },
-    { src: "/brand/foto/momento-2.jpg", alt: "Cane che corre sulla spiaggia", cerca: "dog running beach splash", didascalia: "La prima volta al mare" },
-    { src: "/brand/foto/momento-3.jpg", alt: "Gatto addormentato sulle gambe di una persona", cerca: "cat sleeping on lap cozy", didascalia: "Il pisolino preferito" },
-    { src: "/brand/foto/momento-4.jpg", alt: "Coppia anziana sulla panchina con il suo cane", cerca: "elderly couple bench with dog", didascalia: "Insieme da sempre" },
-    { src: "/brand/foto/momento-5.jpg", alt: "Coniglio tenuto in braccio con dolcezza", cerca: "person holding rabbit gently", didascalia: "Piccolo grande amore" },
-    { src: "/brand/foto/momento-6.jpg", alt: "Ragazzo e cane che si guardano negli occhi", cerca: "young man and dog looking at each other", didascalia: "Ci capiamo al volo" },
+    { src: "/brand/foto/momento-1.jpg", alt: "Una bambina sorridente abbraccia il suo cane sul prato", cerca: "child hugging puppy laughing", didascalia: "Il primo abbraccio" },
+    { src: "/brand/foto/momento-2.jpg", alt: "Un cane che corre tra gli schizzi del mare", cerca: "dog running beach splash", didascalia: "La prima volta al mare" },
+    { src: "/brand/foto/momento-3.jpg", alt: "Un gatto grigio dorme sulle gambe di una persona", cerca: "cat sleeping on lap cozy", didascalia: "Il pisolino preferito" },
+    { src: "/brand/foto/momento-4.jpg", alt: "Una coppia anziana seduta su una panchina con il suo cane", cerca: "elderly couple bench with dog", didascalia: "Insieme da sempre" },
+    { src: "/brand/foto/momento-5.jpg", alt: "Un coniglietto tenuto con dolcezza nel palmo di una mano", cerca: "person holding rabbit gently", didascalia: "Piccolo grande amore" },
+    { src: "/brand/foto/momento-6.jpg", alt: "Un ragazzo e il suo cane si guardano naso a naso", cerca: "young man and dog looking at each other", didascalia: "Ci capiamo al volo" },
   ],
-  profilo: { src: "/brand/foto/funzione-profilo.jpg", alt: "Ritratto di un cane felice", cerca: "happy dog portrait smiling" },
+  profilo: { src: "/brand/foto/funzione-profilo.jpg", alt: "Ritratto di un cane felice con la lingua fuori", cerca: "happy dog portrait smiling" },
   coccole: { src: "/brand/foto/funzione-coccole.jpg", alt: "Mani che accarezzano un gatto", cerca: "hands petting cat" },
-  ponte: { src: "/brand/foto/funzione-ponte.jpg", alt: "Cane in un prato fiorito sotto un cielo pastello", cerca: "dog flower meadow pastel sky" },
-  accesso: { src: "/brand/foto/accesso.jpg", alt: "Una ragazza e il suo cane si sorridono", cerca: "woman smiling with her dog close up" },
+  ponte: { src: "/brand/foto/funzione-ponte.jpg", alt: "Un cane riposa in un prato fiorito di tarassachi", cerca: "dog flower meadow pastel sky" },
+  accesso: { src: "/brand/foto/accesso.jpg", alt: "Una ragazza ride abbracciando il suo cane", cerca: "woman smiling with her dog close up" },
 } satisfies Record<string, MediaSlot | (MediaSlot & { didascalia: string })[]>;
