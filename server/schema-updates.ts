@@ -112,6 +112,7 @@ const STATEMENTS: string[] = [
     created_at timestamp NOT NULL DEFAULT now()
   )`,
   `CREATE INDEX IF NOT EXISTS orders_user_idx ON orders (user_id, created_at)`,
+  `ALTER TABLE orders ADD COLUMN IF NOT EXISTS attachment text NOT NULL DEFAULT 'catenina'`,
 ];
 
 export async function applySchemaUpdates(): Promise<void> {

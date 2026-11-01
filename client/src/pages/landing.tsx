@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PetCard } from "@/components/pets/pet-card";
 import { BrandVideo } from "@/components/media/brand-video";
 import { BrandPhoto } from "@/components/media/brand-photo";
-import { BraceletArt } from "@/components/shop/bracelet-art";
+import { CharmArt } from "@/components/shop/charm-art";
 import { usePageTitle } from "@/components/page-title";
 import { FOTO, VIDEO } from "@/lib/brand-media";
 
@@ -56,11 +56,11 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Il braccialetto NFC, sopra al video: è lui che fa restare con noi ovunque */}
-          <Link href="/negozio" className="group relative block w-56 shrink-0 self-start sm:w-64 md:w-[21rem] md:self-center" aria-label="Scopri il braccialetto NFC">
-            <BraceletArt symbol="zampina" color="corallo" className="animate-floaty w-full drop-shadow-2xl transition-transform duration-500 group-hover:scale-105" />
+          {/* Il ciondolo NFC, sopra al video: è lui che fa restare con noi ovunque */}
+          <Link href="/negozio" className="group relative block w-56 shrink-0 self-start sm:w-64 md:w-[21rem] md:self-center" aria-label="Scopri il ciondolo NFC">
+            <CharmArt symbol="zampina" color="corallo" className="animate-floaty w-full drop-shadow-2xl transition-transform duration-500 group-hover:scale-105" />
             <p className="mt-3 rounded-2xl bg-white/20 px-4 py-2 text-center text-sm font-bold leading-snug backdrop-blur">
-              Avvicina il telefono: si apre il suo profilo. <span className="underline underline-offset-4">Scopri il braccialetto</span>
+              Avvicina il telefono: si apre il suo profilo. <span className="underline underline-offset-4">Scopri il ciondolo</span>
             </p>
           </Link>
         </div>
@@ -109,20 +109,20 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Il braccialetto NFC */}
+      {/* Il ciondolo NFC */}
       <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 pb-16 md:grid-cols-2">
         <div className="rainbow-sky rounded-[2rem] p-8 shadow-xl">
-          <BraceletArt symbol="zampina" color="cielo" className="mx-auto w-full max-w-sm" />
+          <CharmArt symbol="zampina" color="cielo" attachment="cordino" className="mx-auto w-full max-w-xs" />
         </div>
         <div>
-          <p className="text-sm font-bold uppercase tracking-widest text-primary">Il braccialetto</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-primary">Il ciondolo</p>
           <h2 className="mt-2 text-3xl sm:text-4xl">Resta con me, anche fuori dal telefono</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Una perlina con il nome o il simbolo del tuo animale: zampina, cagnolino, gattino, coniglietto.
-            La sfiori col cellulare e si apre il suo profilo, con le foto, le storie e le coccole di sempre.
-            Lo porti al polso oggi, e resta con te anche quando avrà attraversato il Ponte.
+            Un ciondolo con il nome o il simbolo del tuo animale: zampina, cagnolino, gattino, coniglietto.
+            Lo appendi a un bracciale, a una collanina, al collare o alle chiavi. Lo sfiori col cellulare e si apre
+            il suo profilo, con le foto, le storie e le coccole di sempre. Resta con te anche quando avrà attraversato il Ponte.
           </p>
-          <Button asChild size="lg" className="mt-6"><Link href="/negozio">Crea il tuo braccialetto</Link></Button>
+          <Button asChild size="lg" className="mt-6"><Link href="/negozio">Crea il tuo ciondolo</Link></Button>
         </div>
       </section>
 

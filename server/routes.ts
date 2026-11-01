@@ -457,7 +457,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(201).json({ message: "Grazie! Ci pensiamo noi." });
   });
 
-  // ---------- Braccialetti NFC ----------
+  // ---------- Ciondoli NFC ----------
 
   // Indirizzo breve scritto nel chip: avvicini il telefono e arrivi al profilo.
   // Il chip non va mai riscritto: se un domani cambia la pagina, cambia solo questo.
@@ -493,7 +493,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     const all = req.query.all === "1" && req.user!.isAdmin;
     const rows = await db.select({
       id: orders.id, petId: orders.petId, petName: pets.name, symbol: orders.symbol,
-      engravedText: orders.engravedText, color: orders.color, quantity: orders.quantity,
+      engravedText: orders.engravedText, color: orders.color, attachment: orders.attachment, quantity: orders.quantity,
       note: orders.note, status: orders.status, createdAt: orders.createdAt,
       customerName: users.name, customerUsername: users.username, customerEmail: users.email,
     }).from(orders)

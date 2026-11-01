@@ -22,8 +22,8 @@ const staticSeo: Record<string, StaticSeo> = {
     description: "Scopri i profili di cani, gatti e tanti altri amici a quattro zampe (e non solo). Segui i tuoi preferiti!",
   },
   "/negozio": {
-    title: "Il braccialetto NFC | Resta con me",
-    description: "Una perlina con il nome o il simbolo del tuo animale: la avvicini al telefono e si apre il suo profilo. Resta con te, ovunque tu vada.",
+    title: "Il ciondolo NFC | Resta con me",
+    description: "Un ciondolo con il nome o il simbolo del tuo animale: lo avvicini al telefono e si apre il suo profilo. Lo porti dove vuoi, resta con te ovunque tu vada.",
   },
   "/ponte": {
     title: "Il Ponte dell'Arcobaleno | Resta con me",

@@ -3,12 +3,12 @@ import { Link, useLocation } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Smartphone, Sparkles, Heart } from "lucide-react";
 import type { OrderInput, PetSummary } from "@shared/schema";
-import { BEAD_COLORS, MAX_ENGRAVED, MAX_QUANTITY, PRICE_EURO, SYMBOLS, type BeadColorId, type SymbolId } from "@shared/shop";
+import { ATTACHMENTS, BEAD_COLORS, MAX_ENGRAVED, MAX_QUANTITY, PRICE_EURO, SYMBOLS, type AttachmentId, type BeadColorId, type SymbolId } from "@shared/shop";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { BraceletArt } from "@/components/shop/bracelet-art";
+import { CharmArt } from "@/components/shop/charm-art";
 import { usePageTitle } from "@/components/page-title";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
@@ -16,9 +16,9 @@ import { apiRequest } from "@/lib/queryClient";
 import { cn } from "@/lib/utils";
 
 const STEPS = [
-  { icon: Smartphone, title: "Avvicini il telefono", text: "Alla perlina, come per pagare con il cellulare. Non serve nessuna app." },
+  { icon: Smartphone, title: "Avvicini il telefono", text: "Al ciondolo, come per pagare con il cellulare. Non serve nessuna app." },
   { icon: Sparkles, title: "Si apre il suo profilo", text: "Foto, storie e coccole: la pagina dell'animale compare subito." },
-  { icon: Heart, title: "Resta con te, sempre", text: "Anche quando ha attraversato il Ponte dell'Arcobaleno: il braccialetto continua a portarti da lui." },
+  { icon: Heart, title: "Resta con te, sempre", text: "Anche quando ha attraversato il Ponte dell'Arcobaleno: il ciondolo continua a portarti da lui." },
 ];
 
 const choice = (active: boolean) =>
@@ -28,7 +28,7 @@ const choice = (active: boolean) =>
   );
 
 export default function Negozio() {
-  usePageTitle("Braccialetti NFC");
+  usePageTitle("Ciondoli NFC");
   const { user } = useAuth();
   const { toast } = useToast();
   const qc = useQueryClient();
@@ -41,6 +41,7 @@ export default function Negozio() {
   const [symbol, setSymbol] = useState<SymbolId>("zampina");
   const [text, setText] = useState("");
   const [color, setColor] = useState<BeadColorId>("corallo");
+  const [attachment, setAttachment] = useState<AttachmentId>("catenina");
   const [quantity, setQuantity] = useState(1);
   const [note, setNote] = useState("");
 
@@ -81,6 +82,7 @@ export default function Negozio() {
       engravedText: engraving === "name" ? text.trim() : undefined,
       symbol: engraving === "symbol" ? symbol : undefined,
       color,
+      attachment,
       quantity,
       note: note.trim() || undefined,
     });
@@ -90,10 +92,10 @@ export default function Negozio() {
     <div>
       <section className="rainbow-sky relative overflow-hidden px-4 pb-14 pt-12 text-center text-white">
         <div className="mx-auto max-w-3xl">
-          <p className="text-sm font-bold uppercase tracking-widest text-white/90">Il braccialetto NFC</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-white/90">Il ciondolo NFC</p>
           <h1 className="mt-2 text-4xl drop-shadow sm:text-6xl">Resta con me, ovunque tu vada.</h1>
           <p className="mx-auto mt-4 max-w-xl text-lg text-white/95 drop-shadow">
-            Una perlina con il nome o il simbolo del tuo animale. La sfiori col telefono e il suo profilo si apre.
+            Un ciondolo con il nome o il simbolo del tuo animale. Lo metti in un bracciale, in una collanina, sul collare, dove vuoi: lo sfiori col telefono e il suo profilo si apre.
           </p>
         </div>
       </section>
@@ -110,8 +112,8 @@ export default function Negozio() {
 
       <section className="mx-auto grid max-w-5xl items-start gap-8 px-4 pb-16 md:grid-cols-2">
         <div className="soft-card sticky top-20 p-6">
-          <BraceletArt symbol={engraving === "symbol" ? symbol : null} text={shownText} color={color} className="mx-auto w-full max-w-sm" />
-          <p className="mt-2 text-center text-sm text-muted-foreground">Anteprima: la perlina vera sarà fatta a mano.</p>
+          <CharmArt symbol={engraving === "symbol" ? symbol : null} text={shownText} color={color} attachment={attachment} className="mx-auto w-full max-w-xs" />
+          <p className="mt-2 text-center text-sm text-muted-foreground">Anteprima: il ciondolo vero sarà fatto a mano.</p>
         </div>
 
         <div className="space-y-6">
@@ -119,7 +121,7 @@ export default function Negozio() {
 
           {!user ? (
             <div className="soft-card space-y-3 p-6">
-              <p>Per prenotarlo crea il profilo del tuo amico: la perlina porterà proprio lì.</p>
+              <p>Per prenotarlo crea il profilo del tuo amico: il ciondolo porterà proprio lì.</p>
               <div className="flex flex-wrap gap-3">
                 <Button asChild><Link href="/auth?tab=register">Crea il profilo</Link></Button>
                 <Button asChild variant="outline"><Link href="/auth">Ho già un account</Link></Button>
@@ -127,7 +129,7 @@ export default function Negozio() {
             </div>
           ) : pets && pets.length === 0 ? (
             <div className="soft-card space-y-3 p-6">
-              <p>Prima serve il profilo del tuo amico: la perlina porterà proprio lì.</p>
+              <p>Prima serve il profilo del tuo amico: il ciondolo porterà proprio lì.</p>
               <Button asChild><Link href="/nuovo-animale">Crea il primo profilo</Link></Button>
             </div>
           ) : null}
@@ -163,7 +165,7 @@ export default function Negozio() {
             </div>
           ) : (
             <div className="space-y-2">
-              <Label htmlFor="engraved">Il nome sulla perlina</Label>
+              <Label htmlFor="engraved">Il nome sul ciondolo</Label>
               <Input id="engraved" value={text} maxLength={MAX_ENGRAVED} placeholder={pet?.name ?? "Come si chiama?"} onChange={(e) => setText(e.target.value)} />
               <p className="text-xs text-muted-foreground">Al massimo {MAX_ENGRAVED} lettere.</p>
             </div>
@@ -189,6 +191,18 @@ export default function Negozio() {
           </div>
 
           <div className="space-y-2">
+            <Label>Come lo porti?</Label>
+            <div className="flex flex-wrap gap-2" role="radiogroup" aria-label="Come lo porti">
+              {ATTACHMENTS.map((a) => (
+                <button key={a.id} type="button" role="radio" aria-checked={a.id === attachment} className={choice(a.id === attachment)} onClick={() => setAttachment(a.id)}>
+                  {a.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">Ha un anellino: lo puoi appendere a un bracciale, al collare, alle chiavi o a una catenina tua.</p>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="quantity">Quanti?</Label>
             <Input id="quantity" type="number" min={1} max={MAX_QUANTITY} value={quantity} className="w-24" onChange={(e) => setQuantity(Math.min(MAX_QUANTITY, Math.max(1, Number(e.target.value) || 1)))} />
           </div>
@@ -206,7 +220,7 @@ export default function Negozio() {
               Per ora si prenota e basta: non paghi niente adesso. Ti scriviamo all'email del tuo account per confermare prezzo e spedizione.
             </p>
             <Button size="lg" className="w-full" disabled={!user || !canOrder || order.isPending} onClick={submit}>
-              {order.isPending ? "Un attimo…" : "Prenota il braccialetto"}
+              {order.isPending ? "Un attimo…" : "Prenota il ciondolo"}
             </Button>
           </div>
         </div>

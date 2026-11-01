@@ -153,7 +153,7 @@ export default function PetProfilePage() {
                         <DropdownMenuItem onClick={() => navigate(`/pet/${pet.id}/modifica`)}><Pencil className="mr-2 h-4 w-4" /> Modifica il profilo</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => avatarInput.current?.click()}><Camera className="mr-2 h-4 w-4" /> Cambia foto profilo</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => coverInput.current?.click()}><ImagePlus className="mr-2 h-4 w-4" /> Cambia copertina</DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate(`/negozio?pet=${pet.id}`)}><Smartphone className="mr-2 h-4 w-4" /> Braccialetto NFC di {pet.name}</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate(`/negozio?pet=${pet.id}`)}><Smartphone className="mr-2 h-4 w-4" /> Ciondolo NFC di {pet.name}</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {rainbow ? (
                           <DropdownMenuItem onClick={() => setReturnOpen(true)} data-testid="open-return">

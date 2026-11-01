@@ -1,7 +1,8 @@
 /**
- * Il braccialetto NFC di Resta con me: una perlina grande con un chip dentro.
- * Avvicini il telefono e si apre il profilo dell'animale (indirizzo breve
- * /p/:id, vedi server/routes.ts). Qui c'è tutto ciò che si può scegliere.
+ * Il ciondolo NFC di Resta con me: un disco con un chip dentro, da appendere
+ * a un bracciale, a una collanina, al collare o dove si vuole. Avvicini il
+ * telefono e si apre il profilo dell'animale (indirizzo breve /p/:id, vedi
+ * server/routes.ts). Qui c'è tutto ciò che si può scegliere.
  */
 
 export const SYMBOLS = [
@@ -21,6 +22,14 @@ export const BEAD_COLORS = [
   { id: "lilla", label: "Lilla", hex: "#b99be8", dark: "#8a68c4" },
 ] as const;
 export type BeadColorId = (typeof BEAD_COLORS)[number]["id"];
+
+// Con cosa si appende: catenina e cordino si vendono insieme al ciondolo
+export const ATTACHMENTS = [
+  { id: "catenina", label: "Con catenina" },
+  { id: "cordino", label: "Con cordino" },
+  { id: "solo", label: "Solo ciondolo" },
+] as const;
+export type AttachmentId = (typeof ATTACHMENTS)[number]["id"];
 
 export const MAX_ENGRAVED = 12;
 export const MAX_QUANTITY = 5;
@@ -50,6 +59,7 @@ export interface OrderView {
   symbol: string | null;
   engravedText: string | null;
   color: string;
+  attachment: string;
   quantity: number;
   note: string | null;
   status: OrderStatus;

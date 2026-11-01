@@ -10,7 +10,7 @@ export const NAV = [
   { href: "/", label: "Casa", match: (p: string) => p === "/" },
   { href: "/esplora", label: "Esplora", match: (p: string) => p.startsWith("/esplora") },
   { href: "/ponte", label: "Ponte dell'Arcobaleno 🌈", match: (p: string) => p.startsWith("/ponte") },
-  { href: "/negozio", label: "Braccialetti", match: (p: string) => p.startsWith("/negozio") },
+  { href: "/negozio", label: "Ciondoli", match: (p: string) => p.startsWith("/negozio") },
 ];
 
 export default function Header() {
@@ -52,7 +52,7 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => navigate("/miei-animali")}>I miei animali</DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate("/nuovo-animale")}>Aggiungi un amico</DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate("/ordini")}>{user.isAdmin ? "Prenotazioni" : "I miei braccialetti"}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/ordini")}>{user.isAdmin ? "Prenotazioni" : "I miei ciondoli"}</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => logoutMutation.mutate()}>
                     <LogOut className="mr-2 h-4 w-4" /> Esci

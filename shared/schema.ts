@@ -1,7 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp, date, unique, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
-import { BEAD_COLORS, MAX_ENGRAVED, MAX_QUANTITY, SYMBOLS, type BeadColorId, type SymbolId } from "./shop";
+import { ATTACHMENTS, BEAD_COLORS, MAX_ENGRAVED, MAX_QUANTITY, SYMBOLS, type AttachmentId, type BeadColorId, type SymbolId } from "./shop";
 
 // Persone che hanno un account (i "umani" di Resta con me)
 export const users = pgTable("users", {
@@ -118,7 +118,7 @@ export const reports = pgTable("reports", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-// Prenotazioni dei braccialetti NFC (per ora senza pagamento: Sara scrive a chi
+// Prenotazioni dei ciondoli NFC (per ora senza pagamento: Sara scrive a chi
 // ha prenotato per confermare prezzo e spedizione)
 export const orders = pgTable("orders", {
   id: serial("id").primaryKey(),
@@ -127,6 +127,7 @@ export const orders = pgTable("orders", {
   symbol: text("symbol"),
   engravedText: text("engraved_text"),
   color: text("color").notNull(),
+  attachment: text("attachment").default("catenina").notNull(), // catenina | cordino | solo
   quantity: integer("quantity").default(1).notNull(),
   note: text("note"),
   status: text("status").default("new").notNull(), // new | confirmed | making | shipped | cancelled
@@ -204,6 +205,7 @@ export const orderInputSchema = z.object({
   engravedText: z.string().trim().max(MAX_ENGRAVED, `Al massimo ${MAX_ENGRAVED} caratteri`).optional(),
   symbol: z.enum(SYMBOLS.map((s) => s.id) as [SymbolId, ...SymbolId[]]).optional(),
   color: z.enum(BEAD_COLORS.map((c) => c.id) as [BeadColorId, ...BeadColorId[]]),
+  attachment: z.enum(ATTACHMENTS.map((a) => a.id) as [AttachmentId, ...AttachmentId[]]),
   quantity: z.number().int().min(1).max(MAX_QUANTITY),
   note: testoOpzionale(300),
 }).refine((v) => (v.engraving === "name" ? !!v.engravedText : !!v.symbol), {
