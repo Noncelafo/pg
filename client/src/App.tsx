@@ -13,6 +13,8 @@ import Home from "@/pages/home";
 import AuthPage from "@/pages/auth-page";
 import Esplora from "@/pages/esplora";
 import Ponte from "@/pages/ponte";
+import Negozio from "@/pages/negozio";
+import Ordini from "@/pages/ordini";
 import PetProfilePage from "@/pages/pet-profile";
 import PetNew from "@/pages/pet-new";
 import PetEdit from "@/pages/pet-edit";
@@ -35,6 +37,8 @@ function Router() {
       <Route path="/auth" component={AuthPage} />
       <Route path="/esplora" component={Esplora} />
       <Route path="/ponte" component={Ponte} />
+      <Route path="/negozio" component={Negozio} />
+      <ProtectedRoute path="/ordini" component={Ordini} />
       <Route path="/pet/:id" component={PetProfilePage} />
       <ProtectedRoute path="/pet/:id/modifica" component={PetEdit} />
       <ProtectedRoute path="/nuovo-animale" component={PetNew} />

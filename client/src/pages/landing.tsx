@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PetCard } from "@/components/pets/pet-card";
 import { BrandVideo } from "@/components/media/brand-video";
 import { BrandPhoto } from "@/components/media/brand-photo";
+import { BraceletArt } from "@/components/shop/bracelet-art";
 import { usePageTitle } from "@/components/page-title";
 import { FOTO, VIDEO } from "@/lib/brand-media";
 
@@ -38,20 +39,30 @@ export default function Landing() {
       <section className="relative isolate flex min-h-[88svh] items-end overflow-hidden text-white">
         <BrandVideo media={VIDEO.heroCorsa} />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10" aria-hidden="true" />
-        <div className="relative mx-auto w-full max-w-5xl px-4 pb-16 pt-32 sm:pb-24">
-          <p className="mb-4 inline-block rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold backdrop-blur">
-            Il social network degli animali 🐾
-          </p>
-          <h1 className="text-5xl drop-shadow-lg sm:text-7xl md:text-8xl">Resta con me.</h1>
-          <p className="mt-5 max-w-xl text-lg text-white/90 drop-shadow sm:text-xl">
-            Tu sei il mio animale, e resti con me ovunque io sia. Il posto dove raccontare ogni corsa, ogni fusa, ogni giorno insieme.
-          </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button asChild size="lg"><Link href="/auth?tab=register">Crea il profilo del tuo amico</Link></Button>
-            <Button asChild size="lg" variant="outline" className="border-white/60 bg-white/10 text-white backdrop-blur hover:bg-white/20 hover:text-white">
-              <Link href="/esplora">Dai un'occhiata in giro</Link>
-            </Button>
+        <div className="relative mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 pb-16 pt-28 sm:pb-24 md:flex-row md:items-center md:justify-between md:pt-32">
+          <div>
+            <p className="mb-4 inline-block rounded-full bg-white/20 px-4 py-1.5 text-sm font-bold backdrop-blur">
+              Il social network degli animali 🐾
+            </p>
+            <h1 className="text-5xl drop-shadow-lg sm:text-7xl md:text-7xl lg:text-8xl">Resta con me.</h1>
+            <p className="mt-5 max-w-xl text-lg text-white/90 drop-shadow sm:text-xl">
+              Tu sei il mio animale, e resti con me ovunque io sia. Il posto dove raccontare ogni corsa, ogni fusa, ogni giorno insieme.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Button asChild size="lg"><Link href="/auth?tab=register">Crea il profilo del tuo amico</Link></Button>
+              <Button asChild size="lg" variant="outline" className="border-white/60 bg-white/10 text-white backdrop-blur hover:bg-white/20 hover:text-white">
+                <Link href="/esplora">Dai un'occhiata in giro</Link>
+              </Button>
+            </div>
           </div>
+
+          {/* Il braccialetto NFC, sopra al video: è lui che fa restare con noi ovunque */}
+          <Link href="/negozio" className="group relative block w-56 shrink-0 self-start sm:w-64 md:w-[21rem] md:self-center" aria-label="Scopri il braccialetto NFC">
+            <BraceletArt symbol="zampina" color="corallo" className="animate-floaty w-full drop-shadow-2xl transition-transform duration-500 group-hover:scale-105" />
+            <p className="mt-3 rounded-2xl bg-white/20 px-4 py-2 text-center text-sm font-bold leading-snug backdrop-blur">
+              Avvicina il telefono: si apre il suo profilo. <span className="underline underline-offset-4">Scopri il braccialetto</span>
+            </p>
+          </Link>
         </div>
         <ChevronDown className="absolute bottom-4 left-1/2 h-7 w-7 -translate-x-1/2 animate-bounce text-white/80" aria-hidden="true" />
       </section>
@@ -95,6 +106,23 @@ export default function Landing() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Il braccialetto NFC */}
+      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 pb-16 md:grid-cols-2">
+        <div className="rainbow-sky rounded-[2rem] p-8 shadow-xl">
+          <BraceletArt symbol="zampina" color="cielo" className="mx-auto w-full max-w-sm" />
+        </div>
+        <div>
+          <p className="text-sm font-bold uppercase tracking-widest text-primary">Il braccialetto</p>
+          <h2 className="mt-2 text-3xl sm:text-4xl">Resta con me, anche fuori dal telefono</h2>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Una perlina con il nome o il simbolo del tuo animale: zampina, cagnolino, gattino, coniglietto.
+            La sfiori col cellulare e si apre il suo profilo, con le foto, le storie e le coccole di sempre.
+            Lo porti al polso oggi, e resta con te anche quando avrà attraversato il Ponte.
+          </p>
+          <Button asChild size="lg" className="mt-6"><Link href="/negozio">Crea il tuo braccialetto</Link></Button>
         </div>
       </section>
 

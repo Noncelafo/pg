@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Link, useLocation, useRoute } from "wouter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Camera, Flag, Home, ImagePlus, MoreHorizontal, Pencil, Rainbow, Trash2, UserCheck, UserPlus } from "lucide-react";
+import { Camera, Flag, Home, ImagePlus, MoreHorizontal, Pencil, Rainbow, Smartphone, Trash2, UserCheck, UserPlus } from "lucide-react";
 import type { PetProfile } from "@shared/schema";
 import { speciesInfo } from "@shared/species";
 import { Button } from "@/components/ui/button";
@@ -153,6 +153,7 @@ export default function PetProfilePage() {
                         <DropdownMenuItem onClick={() => navigate(`/pet/${pet.id}/modifica`)}><Pencil className="mr-2 h-4 w-4" /> Modifica il profilo</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => avatarInput.current?.click()}><Camera className="mr-2 h-4 w-4" /> Cambia foto profilo</DropdownMenuItem>
                         <DropdownMenuItem onClick={() => coverInput.current?.click()}><ImagePlus className="mr-2 h-4 w-4" /> Cambia copertina</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => navigate(`/negozio?pet=${pet.id}`)}><Smartphone className="mr-2 h-4 w-4" /> Braccialetto NFC di {pet.name}</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {rainbow ? (
                           <DropdownMenuItem onClick={() => setReturnOpen(true)} data-testid="open-return">

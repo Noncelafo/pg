@@ -99,6 +99,19 @@ const STATEMENTS: string[] = [
     status text NOT NULL DEFAULT 'pending',
     created_at timestamp NOT NULL DEFAULT now()
   )`,
+  `CREATE TABLE IF NOT EXISTS orders (
+    id serial PRIMARY KEY,
+    user_id integer NOT NULL REFERENCES users(id),
+    pet_id integer REFERENCES pets(id) ON DELETE SET NULL,
+    symbol text,
+    engraved_text text,
+    color text NOT NULL,
+    quantity integer NOT NULL DEFAULT 1,
+    note text,
+    status text NOT NULL DEFAULT 'new',
+    created_at timestamp NOT NULL DEFAULT now()
+  )`,
+  `CREATE INDEX IF NOT EXISTS orders_user_idx ON orders (user_id, created_at)`,
 ];
 
 export async function applySchemaUpdates(): Promise<void> {

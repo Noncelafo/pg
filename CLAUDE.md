@@ -41,6 +41,13 @@ React 18 + Vite + Tailwind/shadcn + wouter + TanStack Query · Express + Passpor
 - **La rete di questo ambiente blocca pexels.com, mixkit.co, pixabay.com e unsplash.com**: per scaricarli Sara deve aggiungere quei domini nelle impostazioni di rete dell'ambiente, oppure caricare i file in una cartella Google Drive.
 - Anche i contenuti degli utenti sono più fotografici: schede animale a foto piena, scheda "Foto" (galleria con ingrandimento) nel profilo, e sul Ponte una presentazione automatica "I momenti più belli di …" con le foto dei suoi post.
 
+## 3c. Braccialetto NFC e negozio (decisione di Sara del 1/11: serve qualcosa da vendere)
+- Idea: braccialetto con perlina grande, chip NFC dentro (NTAG213), nome o simbolo inciso (zampina, cagnolino, gattino, coniglietto, cuore) e colore. Avvicini il telefono e si apre il profilo; fa da filo conduttore a «resta con me ovunque io sia», anche dopo il Ponte. Niente metallo (blocca il segnale).
+- Il chip contiene solo `/p/:id` (indirizzo breve in `server/routes.ts`, reindirizza a `/pet/:id?nfc=1`): non va mai riscritto.
+- Fatto: pagina `/negozio` (personalizzatore con anteprima `components/shop/bracelet-art.tsx`, SVG su fondo trasparente), prenotazioni senza pagamento (`orders`, `/api/orders`), pagina `/ordini` (le mie; per gli admin tutte, con cambio stato), braccialetto sopra al video nella home e sezione dedicata. Catalogo e prezzo in `shared/shop.ts` (`PRICE_EURO` è `null`: da decidere).
+- **Non fatto**: pagamento (serve account Stripe/PayPal di Sara), email di conferma, indirizzo di spedizione, termini di vendita/recesso/partita IVA (**da Sara/consulente: non inventarli**), foto vera del prototipo da mettere al posto dell'illustrazione SVG.
+- Produzione: da decidere dopo i campioni. Piano: primi pezzi assemblati a mano (chip da ShopNFC/d-logic, perline da Naturali Import), in parallelo campioni da Cintapunto, braccialettirfid.com e fabbriche cinesi (Jiarfidtag, Fujian RFID Factory; MOQ 100-500). Prezzi visti negli annunci, non verificati.
+
 ## 4. Stato (30/10/2026, sera)
 **Fatto e provato** (curl + browser Chrome, desktop e mobile): registrazione/login, profili animali (foto profilo e copertina), post con foto, coccole, commenti, seguire, feed "Per te"/"Chi segui", esplora con filtri, passaggio sul Ponte, luci, dediche, "Ricordi dal Ponte", segnalazioni (salvate in tabella), "Riporta tra noi", galleria foto e presentazione sul Ponte, video di sfondo (provati con file sintetici), build di produzione.
 **Non ancora fatto**

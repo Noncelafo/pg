@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp, date, unique, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import { BEAD_COLORS, MAX_ENGRAVED, MAX_QUANTITY, SYMBOLS, type BeadColorId, type SymbolId } from "./shop";
 
 // Persone che hanno un account (i "umani" di Resta con me)
 export const users = pgTable("users", {
@@ -117,6 +118,23 @@ export const reports = pgTable("reports", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Prenotazioni dei braccialetti NFC (per ora senza pagamento: Sara scrive a chi
+// ha prenotato per confermare prezzo e spedizione)
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id).notNull(),
+  petId: integer("pet_id").references(() => pets.id, { onDelete: "set null" }),
+  symbol: text("symbol"),
+  engravedText: text("engraved_text"),
+  color: text("color").notNull(),
+  quantity: integer("quantity").default(1).notNull(),
+  note: text("note"),
+  status: text("status").default("new").notNull(), // new | confirmed | making | shipped | cancelled
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+}, (t) => ({
+  userIdx: index("orders_user_idx").on(t.userId, t.createdAt),
+}));
+
 export type User = typeof users.$inferSelect;
 export type Pet = typeof pets.$inferSelect;
 export type Post = typeof posts.$inferSelect;
@@ -178,6 +196,20 @@ export const reportInputSchema = z.object({
 }).refine((v) => [v.petId, v.postId, v.commentId, v.tributeId].filter(Boolean).length === 1, {
   message: "Indica cosa vuoi segnalare",
 });
+
+// Incisione: o il nome (testo) o un simbolo, mai tutti e due
+export const orderInputSchema = z.object({
+  petId: z.number().int().positive("Scegli per quale animale è"),
+  engraving: z.enum(["name", "symbol"]),
+  engravedText: z.string().trim().max(MAX_ENGRAVED, `Al massimo ${MAX_ENGRAVED} caratteri`).optional(),
+  symbol: z.enum(SYMBOLS.map((s) => s.id) as [SymbolId, ...SymbolId[]]).optional(),
+  color: z.enum(BEAD_COLORS.map((c) => c.id) as [BeadColorId, ...BeadColorId[]]),
+  quantity: z.number().int().min(1).max(MAX_QUANTITY),
+  note: testoOpzionale(300),
+}).refine((v) => (v.engraving === "name" ? !!v.engravedText : !!v.symbol), {
+  message: "Scegli cosa incidere: il nome o un simbolo",
+});
+export type OrderInput = z.infer<typeof orderInputSchema>;
 
 // Forme dei dati restituiti dalle API (condivise con il client)
 export interface PetSummary {

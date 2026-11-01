@@ -8,10 +8,11 @@ import { nanoid } from "nanoid";
 import { and, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { db } from "./db";
 import {
-  pets, posts, comments, cuddles, follows, lights, tributes, reports,
+  pets, posts, comments, cuddles, follows, lights, tributes, reports, orders, users,
   petInputSchema, rainbowInputSchema, postInputSchema, commentInputSchema,
-  tributeInputSchema, reportInputSchema,
+  tributeInputSchema, reportInputSchema, orderInputSchema,
 } from "@shared/schema";
+import { ORDER_STATUSES } from "@shared/shop";
 import { isValidSpecies } from "@shared/species";
 import { setupAuth, requireAuth } from "./auth";
 import { uploadsDir } from "./data-dir";
@@ -454,6 +455,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     if (!parsed.success) return res.status(400).json({ message: firstIssue(parsed.error) });
     await db.insert(reports).values({ ...parsed.data, reporterId: req.user!.id });
     res.status(201).json({ message: "Grazie! Ci pensiamo noi." });
+  });
+
+  // ---------- Braccialetti NFC ----------
+
+  // Indirizzo breve scritto nel chip: avvicini il telefono e arrivi al profilo.
+  // Il chip non va mai riscritto: se un domani cambia la pagina, cambia solo questo.
+  app.get("/p/:id", (req, res) => {
+    const id = paramId(req);
+    res.redirect(302, id ? `/pet/${id}?nfc=1` : "/");
+  });
+
+  app.post("/api/orders", requireAuth, async (req, res) => {
+    const parsed = orderInputSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: firstIssue(parsed.error) });
+    const { engraving, engravedText, symbol, petId, ...rest } = parsed.data;
+    const pet = await ownedPet(req, res, petId);
+    if (!pet) return;
+    if ([engravedText, rest.note].some((t) => t && containsProfanity(t))) {
+      return res.status(400).json({ message: GENTILE });
+    }
+    const [{ total }] = await db.select({ total: sql<number>`count(*)::int` }).from(orders)
+      .where(and(eq(orders.userId, req.user!.id), eq(orders.status, "new")));
+    if (total >= 10) return res.status(400).json({ message: "Hai già tante prenotazioni in attesa: ti scriviamo presto per confermarle." });
+    const [order] = await db.insert(orders).values({
+      ...rest,
+      petId,
+      userId: req.user!.id,
+      engravedText: engraving === "name" ? engravedText : null,
+      symbol: engraving === "symbol" ? symbol : null,
+    }).returning({ id: orders.id });
+    res.status(201).json(order);
+  });
+
+  // Le mie prenotazioni; chi gestisce il sito (admin) con ?all=1 le vede tutte
+  app.get("/api/orders", requireAuth, async (req, res) => {
+    const all = req.query.all === "1" && req.user!.isAdmin;
+    const rows = await db.select({
+      id: orders.id, petId: orders.petId, petName: pets.name, symbol: orders.symbol,
+      engravedText: orders.engravedText, color: orders.color, quantity: orders.quantity,
+      note: orders.note, status: orders.status, createdAt: orders.createdAt,
+      customerName: users.name, customerUsername: users.username, customerEmail: users.email,
+    }).from(orders)
+      .leftJoin(pets, eq(pets.id, orders.petId))
+      .innerJoin(users, eq(users.id, orders.userId))
+      .where(all ? undefined : eq(orders.userId, req.user!.id))
+      .orderBy(desc(orders.createdAt))
+      .limit(200);
+    res.json(rows.map(({ customerName, customerUsername, customerEmail, createdAt, ...o }) => ({
+      ...o,
+      createdAt: createdAt.toISOString(),
+      ...(all ? { customerName: customerName || customerUsername, customerEmail } : {}),
+    })));
+  });
+
+  app.patch("/api/orders/:id", requireAuth, async (req, res) => {
+    if (!req.user!.isAdmin) return res.sendStatus(403);
+    const id = paramId(req);
+    const status = String(req.body?.status ?? "");
+    if (!id || !(ORDER_STATUSES as readonly string[]).includes(status)) return res.status(400).json({ message: "Stato non valido" });
+    const result = await db.update(orders).set({ status }).where(eq(orders.id, id)).returning({ id: orders.id });
+    if (!result.length) return res.sendStatus(404);
+    res.sendStatus(204);
   });
 
   // Gli errori di percorso /api sconosciuti non devono finire nella pagina HTML

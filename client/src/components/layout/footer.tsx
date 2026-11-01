@@ -12,6 +12,7 @@ export default function Footer() {
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-semibold" aria-label="Piè di pagina">
           <Link href="/esplora" className="hover:text-primary">Esplora</Link>
           <Link href="/ponte" className="hover:text-primary">Ponte dell'Arcobaleno</Link>
+          <Link href="/negozio" className="hover:text-primary">Braccialetti NFC</Link>
           <Link href="/auth" className="hover:text-primary">Accedi</Link>
         </nav>
         <div className="rainbow-bar h-1 w-24 rounded-full" aria-hidden="true" />
